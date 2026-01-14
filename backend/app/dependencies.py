@@ -3,6 +3,7 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta, timezone
+from typing import Optional
 
 from . import crud, models, schemas
 from .database import get_db
@@ -11,7 +12,7 @@ from .config import settings
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 
-def create_access_token(data: dict, expires_delta: timedelta | None = None):
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta

@@ -37,4 +37,39 @@ app.include_router(categories_router, prefix="/categories", tags=["Categories"])
 
 @app.get("/")
 def root():
-    return {"message": "Podcast Platform API is running"}
+    return {
+        "message": "Podcast Platform API",
+        "routes": {
+            "auth": {
+                "register": "POST /auth/register",
+                "login": "POST /auth/login"
+            },
+            "users": {
+                "me": "GET /users/me",
+                "update": "PUT /users/me"
+            },
+            "podcasts": {
+                "list": "GET /podcasts/",
+                "get": "GET /podcasts/{id}",
+                "create": "POST /podcasts/",
+                "update": "PUT /podcasts/{id}"
+            },
+            "categories": {
+                "list": "GET /categories/",
+                "get": "GET /categories/{id}",
+                "create": "POST /categories/"
+            },
+            "comments": {
+                "list": "GET /comments/podcast/{podcast_id}",
+                "create": "POST /comments/",
+                "delete": "DELETE /comments/{id}"
+            },
+            "favorites": {
+                "list": "GET /favorites/",
+                "add": "POST /favorites/{podcast_id}",
+                "remove": "DELETE /favorites/{podcast_id}"
+            },
+            "docs": "GET /docs",
+            "redoc": "GET /redoc"
+        }
+    }

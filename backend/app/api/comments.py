@@ -6,7 +6,7 @@ from app import crud, schemas
 from app.dependencies import get_current_active_user, get_db
 from app.models.user import User
 
-router = APIRouter(prefix="/comments", tags=["comments"])
+router = APIRouter(tags=["comments"])
 
 
 @router.get("/podcast/{podcast_id}", response_model=List[schemas.CommentOut])

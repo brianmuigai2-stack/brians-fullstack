@@ -25,4 +25,10 @@ from .favorite import (
     remove_favorite,
     is_podcast_favorited,
     get_user_favorite_podcasts,
-)                              
+)
+from .category import (
+    get_category,
+    get_categories,
+    get_category_by_name,
+    create_category,
+)

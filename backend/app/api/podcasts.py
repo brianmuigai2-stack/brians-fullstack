@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
 
 from app import crud, schemas
 from app.dependencies import get_current_active_user, get_db
 from app.models.user import User
 
-router = APIRouter(prefix="/podcasts", tags=["podcasts"])
+router = APIRouter(tags=["podcasts"])
 
 
 @router.get("/", response_model=List[schemas.PodcastOut])
@@ -32,7 +32,7 @@ def get_podcast_detail(
 @router.post("/", response_model=schemas.PodcastOut, status_code=201)
 def create_podcast(
     title: str = Form(...),
-    description: str | None = Form(None),
+    description: Optional[str] = Form(None),
     category_id: int = Form(...),
     audio_file: UploadFile = File(...),
     current_user: User = Depends(get_current_active_user),

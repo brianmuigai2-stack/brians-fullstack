@@ -5,7 +5,7 @@ from app import crud, schemas
 from app.dependencies import get_current_active_user, get_db
 from app.models.user import User
 
-router = APIRouter(prefix="/users", tags=["users"])
+router = APIRouter(tags=["users"])
 
 
 @router.get("/me", response_model=schemas.UserOut)

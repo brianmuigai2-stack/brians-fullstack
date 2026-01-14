@@ -6,7 +6,7 @@ from app.crud import category as crud_category
 from app.schemas import category as schemas_category
 from app.dependencies import get_db
 
-router = APIRouter(prefix="/categories", tags=["categories"])
+router = APIRouter(tags=["categories"])
 
 
 @router.get("/", response_model=List[schemas_category.CategoryOut])
