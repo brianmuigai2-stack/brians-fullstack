@@ -41,12 +41,15 @@ finally:
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Temporarily allow all origins for testing
+    allow_origins=[
+        "https://podcast-platform-6bch.vercel.app",  # Your deployed frontend
+        "http://localhost:5173",                      # Local dev (Vite default)
+        "http://localhost:3000",                      # Alternative local dev port
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 app.include_router(auth_router, prefix="/auth", tags=["Authentication"])
 app.include_router(users_router, prefix="/users", tags=["Users"])
 app.include_router(podcasts_router, prefix="/podcasts", tags=["Podcasts"])
