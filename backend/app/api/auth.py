@@ -14,9 +14,12 @@ def register_user(
     user_in: schemas.UserCreate,
     db: Session = Depends(get_db),
 ):
+    print(f"Register attempt: {user_in.email}, {user_in.username}")
     if crud.get_user_by_email(db, user_in.email):
+        print("Email already registered")
         raise HTTPException(status_code=400, detail="Email already registered")
     if crud.get_user_by_username(db, user_in.username):
+        print("Username already taken")
         raise HTTPException(status_code=400, detail="Username already taken")
 
     hashed_password = utils.get_password_hash(user_in.password)
@@ -29,6 +32,7 @@ def register_user(
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
+    print(f"User registered: {db_user.id}")
     return db_user
 
 

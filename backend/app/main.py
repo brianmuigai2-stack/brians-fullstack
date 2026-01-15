@@ -1,6 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.schemas import user, podcast, comment, category, favorite
+from app.database import SessionLocal
+from app.models import Podcast
 from .schemas import user, podcast, comment, category, favorite
+
 
 from app.api import (
     auth_router,
@@ -16,6 +20,17 @@ app = FastAPI(
     description="Backend API for Podcast / Audio Content Platform",
     version="0.1.0"
 )
+
+# Seed database if empty
+db = SessionLocal()
+try:
+    if db.query(Podcast).count() == 0:
+        print("Database is empty, running seed script...")
+        exec(open("seed_data.py").read())
+except Exception as e:
+    print(f"Error seeding database: {e}")
+finally:
+    db.close()
 
 app.add_middleware(
     CORSMiddleware,
