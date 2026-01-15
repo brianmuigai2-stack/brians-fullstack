@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.schemas import user, podcast, comment, category, favorite
+from .schemas import user, podcast, comment, category, favorite
 
 from app.api import (
     auth_router,
