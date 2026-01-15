@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.schemas import user, podcast, comment, category, favorite
 from app.database import SessionLocal
 from app.models import Podcast
+from .schemas import user, podcast, comment, category, favorite
+
 
 from app.api import (
     auth_router,
