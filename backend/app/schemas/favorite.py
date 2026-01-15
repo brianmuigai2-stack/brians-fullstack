@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import List
 from .podcast import PodcastOut
 from datetime import datetime
@@ -12,8 +12,7 @@ class FavoriteOut(BaseModel):
     podcast_id: int
     created_at: datetime
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 class FavoriteList(BaseModel):
     favorites: List[PodcastOut]
