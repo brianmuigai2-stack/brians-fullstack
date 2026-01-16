@@ -5,123 +5,102 @@ import { categoriesApi } from "../api/categories";
 import { favoritesApi } from "../api/favorites";
 import { useAuth } from "../context/AuthContext";
 import PodcastCard from "../components/PodcastCard";
+import { Headphones, Globe, Users, Sparkles, Smartphone, Play } from "lucide-react";
+
+// ... (Imports stay the same)
 
 export default function Home() {
-  const { user } = useAuth();
-  const [podcasts, setPodcasts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [favorites, setFavorites] = useState([]);
-
-  useEffect(() => {
-    podcastsApi.getAll().then(setPodcasts).catch(console.error);
-    categoriesApi.getAll().then(setCategories).catch(console.error);
-    if (user) {
-      favoritesApi.getAll().then(setFavorites).catch(console.error);
-    }
-  }, [user]);
-
-  const filteredPodcasts = selectedCategory
-    ? podcasts.filter(p => p.category.id === selectedCategory)
-    : podcasts;
-
-  const totalListens = podcasts.reduce((sum, p) => sum + p.listen_count, 0);
+  // ... (Keep stats logic if you want to show numbers on landing page)
 
   return (
-    <div>
-      <section className="bg-gradient-to-r from-purple-900 via-purple-700 to-pink-700 text-white py-20">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-6xl font-bold mb-4">Welcome to PodWave</h1>
-          <p className="text-2xl mb-2">Discover Your Next Favorite Podcast</p>
-          <p className="text-lg mb-8 text-purple-100">Stream thousands of podcasts across all genres. Listen, subscribe, and connect with creators worldwide.</p>
-          <div className="flex gap-4 justify-center">
-            <Link to="/register" className="bg-white text-purple-700 px-8 py-3 rounded-lg font-semibold hover:bg-purple-50 transition">
-              Get Started Free
-            </Link>
-            <button onClick={() => document.getElementById('podcasts').scrollIntoView({ behavior: 'smooth' })} className="bg-purple-800 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-900 transition">
-              Browse Podcasts
-            </button>
+    <div className="min-h-screen bg-black">
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center overflow-hidden bg-black pt-20">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#39FF14]/10 via-black to-black"></div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-4xl mx-auto text-center space-y-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#39FF14]/30 bg-[#39FF14]/5 text-[#39FF14] font-mono text-xs uppercase tracking-[0.2em] mb-4">
+               <Sparkles size={14} /> The Future of Audio is Here
+            </div>
+            
+            <h1 className="text-6xl md:text-9xl font-black leading-none tracking-tighter text-white uppercase">
+              WE TALK,<br />
+              <span className="text-[#39FF14]">YOU LISTEN.</span>
+            </h1>
+            
+            <p className="text-xl md:text-2xl text-gray-400 font-light max-w-2xl mx-auto">
+              The world's most immersive podcast platform. High-fidelity sound meets boundary-pushing creators.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-6 justify-center pt-8">
+              <Link 
+                to="/explore" 
+                className="px-12 py-5 bg-[#39FF14] text-black font-black uppercase tracking-tighter rounded-full hover:scale-110 transition-all shadow-[0_0_30px_rgba(57,255,20,0.4)]"
+              >
+                Enter The Wave
+              </Link>
+              <Link 
+                to="/register" 
+                className="px-12 py-5 border-2 border-white text-white font-black uppercase tracking-tighter rounded-full hover:bg-white hover:text-black transition-all"
+              >
+                Join Studio
+              </Link>
+            </div>
           </div>
+        </div>
+
+        {/* Decorative Waveform Mockup */}
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black to-transparent opacity-50 flex items-end gap-1 px-4">
+           {[...Array(40)].map((_, i) => (
+             <div key={i} className="flex-1 bg-[#39FF14]/20 rounded-t-full" style={{ height: `${Math.random() * 100}%` }}></div>
+           ))}
         </div>
       </section>
 
-      <section className="bg-gray-900 py-12">
+      {/* Stats Section (Kept for landing page social proof) */}
+      <section className="bg-[#050505] py-24 border-y border-gray-900">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-            <div className="bg-gray-800 p-6 rounded-lg">
-              <h3 className="text-4xl font-bold text-purple-400 mb-2">{podcasts.length}</h3>
-              <p className="text-gray-300">Total Podcasts</p>
-            </div>
-            <div className="bg-gray-800 p-6 rounded-lg">
-              <h3 className="text-4xl font-bold text-purple-400 mb-2">{categories.length}</h3>
-              <p className="text-gray-300">Categories</p>
-            </div>
-            <div className="bg-gray-800 p-6 rounded-lg">
-              <h3 className="text-4xl font-bold text-purple-400 mb-2">{totalListens}</h3>
-              <p className="text-gray-300">Total Listens</p>
-            </div>
-            <div className="bg-gray-800 p-6 rounded-lg">
-              <h3 className="text-4xl font-bold text-purple-400 mb-2">24/7</h3>
-              <p className="text-gray-300">Always Available</p>
-            </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
+            {[
+              { label: "Active Channels", val: "500+" },
+              { label: "Global Listeners", val: "2.4M" },
+              { label: "Daily Streams", val: "18K" },
+              { label: "Audio Quality", val: "LOSSLESS" }
+            ].map((stat, i) => (
+              <div key={i} className="text-center group">
+                <h3 className="text-4xl md:text-5xl font-black text-white group-hover:text-[#39FF14] transition-colors">{stat.val}</h3>
+                <p className="text-gray-600 font-mono uppercase text-xs tracking-widest mt-2">{stat.label}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      <section id="podcasts" className="container mx-auto px-4 py-12">
-        <h2 className="text-4xl font-bold mb-6 text-white">Explore Podcasts</h2>
-        <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
-          <button
-            onClick={() => setSelectedCategory(null)}
-            className={`px-4 py-2 rounded whitespace-nowrap transition ${!selectedCategory ? 'bg-purple-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
-          >
-            All
-          </button>
-          {categories.map(cat => (
-            <button
-              key={cat.id}
-              onClick={() => setSelectedCategory(cat.id)}
-              className={`px-4 py-2 rounded whitespace-nowrap transition ${selectedCategory === cat.id ? 'bg-purple-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
-            >
-              {cat.name}
-            </button>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredPodcasts.map(podcast => (
-            <PodcastCard
-              key={podcast.id}
-              podcast={podcast}
-              isFavorite={favorites.some(f => f.podcast_id === podcast.id)}
-              onFavoriteChange={() => user && favoritesApi.getAll().then(setFavorites)}
-            />
-          ))}
-        </div>
+      {/* Feature Cards Section (Replaces the podcast grid on home) */}
+      <section className="py-32 bg-black">
+         <div className="container mx-auto px-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+               <div className="p-10 bg-[#121212] border border-gray-800 rounded-[3rem] hover:border-[#39FF14]/50 transition-all">
+                  <Headphones size={40} className="text-[#39FF14] mb-6" />
+                  <h3 className="text-2xl font-black uppercase mb-4">Studio Quality</h3>
+                  <p className="text-gray-500">Every wave is processed for maximum clarity. Experience audio as it was meant to be heard.</p>
+               </div>
+               <div className="p-10 bg-[#121212] border border-gray-800 rounded-[3rem] hover:border-[#39FF14]/50 transition-all">
+                  <Globe size={40} className="text-[#39FF14] mb-6" />
+                  <h3 className="text-2xl font-black uppercase mb-4">No Borders</h3>
+                  <p className="text-gray-500">Connecting voices from Tokyo to New York. The wave travels everywhere you do.</p>
+               </div>
+               <div className="p-10 bg-[#121212] border border-gray-800 rounded-[3rem] hover:border-[#39FF14]/50 transition-all">
+                  <Users size={40} className="text-[#39FF14] mb-6" />
+                  <h3 className="text-2xl font-black uppercase mb-4">Creator First</h3>
+                  <p className="text-gray-500">Built by artists for artists. Direct engagement and transparent analytics for every host.</p>
+               </div>
+            </div>
+         </div>
       </section>
 
-      <section className="bg-gray-900 py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-4 text-white">Why Choose PodWave?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-            <div className="bg-gray-800 p-8 rounded-lg">
-              <div className="text-5xl mb-4">🎧</div>
-              <h3 className="text-xl font-bold mb-2 text-white">High Quality Audio</h3>
-              <p className="text-gray-400">Crystal clear sound for the best listening experience</p>
-            </div>
-            <div className="bg-gray-800 p-8 rounded-lg">
-              <div className="text-5xl mb-4">🌐</div>
-              <h3 className="text-xl font-bold mb-2 text-white">Global Content</h3>
-              <p className="text-gray-400">Access podcasts from creators around the world</p>
-            </div>
-            <div className="bg-gray-800 p-8 rounded-lg">
-              <div className="text-5xl mb-4">💬</div>
-              <h3 className="text-xl font-bold mb-2 text-white">Community Driven</h3>
-              <p className="text-gray-400">Engage with creators and fellow listeners</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Mobile App & Final CTA (Keep your existing mobile section here) */}
     </div>
   );
 }
