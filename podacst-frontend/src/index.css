@@ -1,95 +1,79 @@
-/* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
-
 @import "tailwindcss";
 
-@layer theme {
-  /* Color Tokens */
-  --color-brand-primary: #39FF14;
-  --color-brand-primary-dark: #22E600;
-  --color-brand-accent: #4666FF;
+/* 1. Theme Configuration (Tailwind v4 Style) */
+@theme {
+  /* Brand Colors - Now accessible via bg-brand, text-accent, etc. */
+  --color-brand: #39FF14;
+  --color-brand-dark: #22E600;
+  --color-accent: #4666FF;
   
-  --color-bg-primary: #000000;
+  --color-bg-deep: #000000;
   --color-bg-elevated: #0a0a0a;
   --color-bg-card: #1a1a1a;
-  --color-bg-card-hover: #242424;
   
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #b0b0b0;
-  --color-text-muted: #808080;
+  /* Typography */
+  --font-heading: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
   
-  --color-border: #2a2a2a;
-  --color-border-hover: #3a3a3a;
-  
-  /* Typography Tokens */
-  --font-family-heading: 'Space Grotesk', system-ui, sans-serif;
-  --font-family-body: 'Inter', system-ui, sans-serif;
-  
-  /* Spacing Tokens */
-  --spacing-section: 6rem;
-  --spacing-section-sm: 4rem;
-  
-  /* Border Radius Tokens */
-  --radius-card: 1rem;
-  --radius-button: 0.5rem;
-  
-  /* Shadow Tokens */
-  --shadow-glow: 0 0 20px rgba(57, 255, 20, 0.3);
-  --shadow-glow-sm: 0 0 10px rgba(57, 255, 20, 0.2);
-  
-  /* Glassmorphism Tokens */
-  --glass-bg: rgba(26, 26, 26, 0.7);
-  --glass-border: rgba(57, 255, 20, 0.1);
+  /* Custom Animations for Home Page */
+  --animate-pulse-slow: pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-bounce-subtle: bounce-subtle 3s ease-in-out infinite;
+  --animate-gradient-x: gradient-x 15s ease infinite;
+
+  @keyframes bounce-subtle {
+    0%, 100% { transform: translateY(-5%); }
+    50% { transform: translateY(0); }
+  }
+
+  @keyframes gradient-x {
+    0%, 100% { 
+      background-size: 200% 200%; 
+      background-position: left center; 
+    }
+    50% { 
+      background-size: 200% 200%; 
+      background-position: right center; 
+    }
+  }
 }
 
+/* 2. Base Styles */
 @layer base {
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
   body {
-    font-family: var(--font-family-body);
-    background-color: var(--color-bg-primary);
-    color: var(--color-text-primary);
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    @apply bg-black text-white antialiased selection:bg-brand selection:text-black;
+    font-family: var(--font-body);
   }
-  
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-family-heading);
-    font-weight: 700;
-    line-height: 1.2;
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    @apply tracking-tighter uppercase;
   }
 }
 
+/* 3. Custom Utilities & Components */
 @layer components {
   .glass-card {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    @apply bg-white/5 border border-white/10 backdrop-blur-md;
   }
   
-  .text-gradient {
-    background: linear-gradient(135deg, var(--color-brand-primary) 0%, var(--color-brand-accent) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  .text-glow {
+    text-shadow: 0 0 15px rgba(57, 255, 20, 0.5);
   }
-  
-  .glow-effect {
-    box-shadow: var(--shadow-glow);
+
+  /* Professional Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-black;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-800 rounded-full hover:bg-brand;
   }
 }
 
-/* FIX: @utility must be top-level (not inside @layer) */
 @utility scrollbar-hidden {
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  &::-webkit-scrollbar { display: none; }
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
