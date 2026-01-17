@@ -40,7 +40,7 @@ export default function Home() {
           <h1 className="text-7xl md:text-[10rem] font-black leading-[0.85] tracking-[-0.05em] uppercase mb-8">
             OWN THE <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#39FF14] via-white to-[#39FF14] bg-[length:200%_auto] animate-gradient-x">
-              FREQUENCY. [UPDATED]
+              FREQUENCY. 
             </span>
           </h1>
           
