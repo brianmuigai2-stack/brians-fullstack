@@ -1,4 +1,4 @@
-const PRODUCTION_API_URL = 'https://podcast-platform.onrender.com';
+const PRODUCTION_API_URL = 'https://podcast-platform.onrender.com/';
 const DEVELOPMENT_API_URL = 'http://localhost:8000';
 
 const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? DEVELOPMENT_API_URL : PRODUCTION_API_URL);
