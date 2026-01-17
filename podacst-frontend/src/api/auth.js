@@ -1,27 +1,31 @@
-import { api } from './client';
-
-const BASE_URL = import.meta.env.VITE_API_URL;
+import { api, API_URL } from "./client";
 
 export const authApi = {
-  login: async (username, password) => {
+  login: async (email, password) => {
     const formData = new URLSearchParams();
-    formData.append('username', username);
-    formData.append('password', password);
+    formData.append("username", email);  // FastAPI expects 'username' for OAuth2PasswordRequestForm
+    formData.append("password", password);
 
-    const response = await fetch(`${BASE_URL}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: formData,
+    const response = await fetch(`${API_URL}/auth/login`, {
+      method: "POST",
+      body: formData, // do NOT JSON.stringify
     });
 
-    if (!response.ok) throw new Error('Login failed');
-    return response.json();
+    if (!response.ok) {
+      let error = "Login failed";
+      try {
+        const errJson = await response.json();
+        error = errJson.detail || error;
+      } catch {}
+      throw new Error(error);
+    }
+
+    const data = await response.json();
+    localStorage.setItem("token", data.access_token);
+    localStorage.setItem("token_type", data.token_type || "bearer");
+
+    return data;
   },
 
-  register: (data) => api.post('/auth/register', data),
-
-  forgotPassword: (email) => api.post('/auth/forgot-password', { email }),
-
-  resetPassword: (token, new_password) =>
-    api.post('/auth/reset-password', { token, new_password }),
+  register: (data) => api.post("/auth/register", data),
 };

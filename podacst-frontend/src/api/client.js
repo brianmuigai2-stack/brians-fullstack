@@ -1,29 +1,31 @@
-const PRODUCTION_API_URL = 'https://podcast-platform.onrender.com';
-const DEVELOPMENT_API_URL = 'http://localhost:8000';
+const PRODUCTION_API_URL = "https://podcast-platform.onrender.com";
+const DEVELOPMENT_API_URL = "http://localhost:8000";
 
-const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? DEVELOPMENT_API_URL : PRODUCTION_API_URL);
+export const API_URL = import.meta.env.VITE_API_URL ||
+  (import.meta.env.DEV ? DEVELOPMENT_API_URL : PRODUCTION_API_URL);
 
 const getAuthHeaders = () => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
 export const api = {
   async request(endpoint, options = {}) {
-    // Ensure endpoint always starts with a single slash
-    const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+    const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+
+    const headers = {
+      ...getAuthHeaders(),
+      ...(options.body ? { "Content-Type": "application/json" } : {}),
+      ...options.headers,
+    };
 
     const response = await fetch(`${API_URL}${cleanEndpoint}`, {
       ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...getAuthHeaders(),
-        ...options.headers,
-      },
+      headers,
     });
 
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ detail: 'Request failed' }));
+      const error = await response.json().catch(() => ({ detail: "Request failed" }));
       throw new Error(JSON.stringify(error));
     }
 
@@ -36,19 +38,19 @@ export const api = {
 
   post(endpoint, data) {
     return this.request(endpoint, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(data),
     });
   },
 
   put(endpoint, data) {
     return this.request(endpoint, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(data),
     });
   },
 
   delete(endpoint) {
-    return this.request(endpoint, { method: 'DELETE' });
+    return this.request(endpoint, { method: "DELETE" });
   },
 };
