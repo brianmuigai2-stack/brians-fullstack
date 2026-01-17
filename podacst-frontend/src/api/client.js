@@ -1,4 +1,4 @@
-const PRODUCTION_API_URL = 'https://podcast-platform.onrender.com/';
+const PRODUCTION_API_URL = 'https://podcast-platform.onrender.com';
 const DEVELOPMENT_API_URL = 'http://localhost:8000';
 
 const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? DEVELOPMENT_API_URL : PRODUCTION_API_URL);
@@ -10,7 +10,10 @@ const getAuthHeaders = () => {
 
 export const api = {
   async request(endpoint, options = {}) {
-    const response = await fetch(`${API_URL}${endpoint}`, {
+    // Ensure endpoint always starts with a single slash
+    const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+
+    const response = await fetch(`${API_URL}${cleanEndpoint}`, {
       ...options,
       headers: {
         'Content-Type': 'application/json',
@@ -18,10 +21,12 @@ export const api = {
         ...options.headers,
       },
     });
+
     if (!response.ok) {
       const error = await response.json().catch(() => ({ detail: 'Request failed' }));
       throw new Error(JSON.stringify(error));
     }
+
     return response.json();
   },
 
